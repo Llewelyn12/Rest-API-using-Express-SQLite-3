@@ -8,13 +8,13 @@ const db = new sqlite3.Database('./database.db');
 app.use(express.json());
 
 db.serialize(() => {
-    db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, email TEXT, password TEXT)');
+    db.run(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, email TEXT, password TEXT)`);
 });
 
 
 app.post('/users', (req, res) => {
     const {username, email, password} = req.body;
-    db.run('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', ["Llewelyn", "roboto@gmail.com", "1234"], function(err) {
+    db.run(`INSERT INTO users (username, email, password) VALUES (?, ?, ?)`, ["Llewelyn", "roboto@gmail.com", "1234"], function(err) {
         if (err) {
             res.status(500).json({error:err.message});
             return;
@@ -37,7 +37,7 @@ app.get('/users', (req, res) => {
 
 app.get('/users/:id', (req, res) => {
     const id = req.params.id;
-    db.get('SELECT * FROM users WHERE id = ?', [id], (err, row) => {
+    db.get(`SELECT * FROM users WHERE id = ?`, [id], (err, row) => {
         if (err) {
             res.status(500).json({error: err.message});
             return;
@@ -90,5 +90,5 @@ app.delete('/users/:id', (req, res) => {
 
 
 app.listen(port, () => {
-    console.log(`server running at http://localhost:${port}`);
+    console.log('server running at http://localhost:${port}');
 });
